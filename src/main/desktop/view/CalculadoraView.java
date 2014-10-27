@@ -1,7 +1,9 @@
-package desktop.view;
+package main.desktop.view;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import main.desktop.controller.CalculadoraController;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -12,8 +14,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
-import desktop.controller.CalculadoraController;
 
 public class CalculadoraView
 {

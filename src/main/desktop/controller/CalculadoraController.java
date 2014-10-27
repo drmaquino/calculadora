@@ -1,10 +1,9 @@
-package desktop.controller;
+package main.desktop.controller;
 
-import model.Calculadora;
+import main.desktop.view.CalculadoraView;
+import main.model.Calculadora;
 
 import org.eclipse.swt.widgets.Button;
-
-import desktop.view.CalculadoraView;
 
 public class CalculadoraController
 {
@@ -16,10 +15,10 @@ public class CalculadoraController
         this.calculadora = new Calculadora();
         this.calculadoraView = view;
     }
-    
+
     public void callback(Button button)
     {
-        switch(button.getText())
+        switch (button.getText())
         {
             case "/":
             case "*":
@@ -41,7 +40,7 @@ public class CalculadoraController
                 break;
         }
     }
-    
+
     public void updateDisplay(String arg)
     {
         this.calculadoraView.getDisplayText().setText(arg);
