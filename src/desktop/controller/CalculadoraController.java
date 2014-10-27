@@ -4,13 +4,17 @@ import model.Calculadora;
 
 import org.eclipse.swt.widgets.Button;
 
+import desktop.view.CalculadoraView;
+
 public class CalculadoraController
 {
     private Calculadora calculadora;
+    private CalculadoraView calculadoraView;
 
-    public CalculadoraController()
+    public CalculadoraController(CalculadoraView view)
     {
         this.calculadora = new Calculadora();
+        this.calculadoraView = view;
     }
     
     public void callback(Button button)
@@ -21,22 +25,25 @@ public class CalculadoraController
             case "*":
             case "-":
             case "+":
-                System.out.println(String.format("operacion (%s)", button));
+                updateDisplay(button.getText());
                 break;
             case "=":
-                System.out.println(String.format("igual (%s)", button));
+                updateDisplay(button.getText());
                 break;
             case ".":
-                System.out.println(String.format("punto (%s)", button));
+                updateDisplay(button.getText());
                 break;
             case "CE":
-                System.out.println(String.format("borrar (%s)", button));
+                updateDisplay(button.getText());
                 break;
             default:
-                System.out.println(String.format("numero (%s)", button));
+                updateDisplay(button.getText());
                 break;
         }
     }
     
-    public void updateDisplay(){}
+    public void updateDisplay(String arg)
+    {
+        this.calculadoraView.getDisplayText().setText(arg);
+    }
 }

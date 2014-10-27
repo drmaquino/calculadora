@@ -17,12 +17,22 @@ import desktop.controller.CalculadoraController;
 
 public class CalculadoraView
 {
-    CalculadoraController calculadoraController;
-    private String displayString = "0";
+    private CalculadoraController calculadoraController;
+    private Text displayText;
+    
+    public Text getDisplayText()
+    {
+        return displayText;
+    }
+
+    public void setDisplayText(Text displayText)
+    {
+        this.displayText = displayText;
+    }
 
     CalculadoraView()
     {
-        this.calculadoraController = new CalculadoraController();
+        this.calculadoraController = new CalculadoraController(this);
         Display display = new Display();
         Shell shell = new Shell(display, SWT.CLOSE | SWT.TITLE | SWT.MIN);
         shell.setText("Calculadora");
@@ -41,12 +51,12 @@ public class CalculadoraView
         calculatorGridLayout.horizontalSpacing = 2;
         shell.setLayout(calculatorGridLayout);
 
-        Text displayText = new Text(shell, SWT.RIGHT | SWT.BORDER);
+        displayText = new Text(shell, SWT.RIGHT | SWT.BORDER);
         displayText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
         displayText.setEditable(false);
         displayText.setDoubleClickEnabled(false);
         displayText.setTextLimit(30);
-        displayText.setText(displayString);
+        displayText.setText("0");
         displayText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 3, 1));
         
         final Button ceButton = new Button(shell, SWT.NONE);
@@ -118,5 +128,4 @@ public class CalculadoraView
     {
         CalculadoraView calculadoraView = new CalculadoraView();
     }
-
 }
