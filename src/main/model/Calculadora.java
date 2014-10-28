@@ -1,33 +1,101 @@
 package main.model;
 
-public class Calculadora
+import java.util.Observable;
+
+import main.model.operaciones.Operacion;
+import main.model.operaciones.OperacionFactory;
+
+public class Calculadora extends Observable
 {
-    private String displayBuffer;
-    private String operationBuffer;
-    private String resultBuffer;    
-    
-    public String getNumberBuffer()
+    private double resultado;
+    private String operacion_buffer;
+    private Double num_buffer;
+    private OperacionFactory operacionFactory;
+
+    public Calculadora()
     {
-        return displayBuffer;
+        this.resultado = 0;
+        this.operacion_buffer = null;
+        this.num_buffer = null;
+        this.operacionFactory = new OperacionFactory();
     }
-    public void setNumberBuffer(String numberBuffer)
+
+    public Double addNumero(double numero)
     {
-        this.displayBuffer = numberBuffer;
+        if (this.num_buffer == null)
+        {
+            this.num_buffer = numero;
+        }
+        else
+        {
+            this.num_buffer *= 10;
+            this.num_buffer += numero;
+        }
+        return this.num_buffer;
     }
-    public String getOperationBuffer()
+
+    public String setOperacion(String operacion)
     {
-        return operationBuffer;
+        update();
+        this.operacion_buffer = operacion;
+        return this.operacion_buffer;
     }
-    public void setOperationBuffer(String operationBuffer)
+
+    public Double igual()
     {
-        this.operationBuffer = operationBuffer;
+        update();
+        return getResultado();
     }
-    public String getResultBuffer()
+
+    public Double clear()
     {
-        return resultBuffer;
+        this.resultado = 0D;
+        this.num_buffer = null;
+        this.operacion_buffer = null;
+        return resultado;
     }
-    public void setResultBuffer(String resultBuffer)
+
+    public double getResultado()
     {
-        this.resultBuffer = resultBuffer;
+        return this.resultado;
     }
+
+    private Double update()
+    {
+        Operacion operacion;
+
+        if (this.num_buffer != null)
+        {
+            if (this.operacion_buffer != null)
+            {
+                operacion = this.crearOperacion(this.operacion_buffer);
+                operacion.setOperando1(this.resultado);
+                operacion.setOperando2(this.num_buffer);
+                this.resultado = operacion.calcular();
+                this.num_buffer = null;
+                this.operacion_buffer = null;
+            } else
+            {
+                this.resultado = num_buffer;
+                this.num_buffer = null;
+            }
+        } else
+        {
+            if (this.operacion_buffer == null)
+            {
+                this.resultado = 0D;
+                // this.num_buffer = null; //?
+            } else
+            {
+                // nada?
+            }
+        }
+        return this.resultado;
+    }
+
+    private Operacion crearOperacion(String signo)
+    {
+        return this.operacionFactory.getOperacion(signo);
+    }
+
 }
