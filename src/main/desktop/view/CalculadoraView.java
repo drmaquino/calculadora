@@ -30,7 +30,7 @@ public class CalculadoraView
         this.displayText = displayText;
     }
 
-    CalculadoraView()
+    public CalculadoraView()
     {
         this.calculadoraController = new CalculadoraController(this);
         Display display = new Display();
@@ -122,10 +122,5 @@ public class CalculadoraView
             }
         }
         display.dispose();
-    }
-
-    public static void main(String[] args)
-    {
-        CalculadoraView calculadoraView = new CalculadoraView();
     }
 }

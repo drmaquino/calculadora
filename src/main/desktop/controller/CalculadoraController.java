@@ -1,5 +1,7 @@
 package main.desktop.controller;
 
+import main.desktop.ConsoleObserver;
+import main.desktop.DisplayObserver;
 import main.desktop.view.CalculadoraView;
 import main.model.Calculadora;
 
@@ -9,10 +11,16 @@ public class CalculadoraController
 {
     private Calculadora calculadora;
     private CalculadoraView calculadoraView;
+    private DisplayObserver displayObserver;
+    private ConsoleObserver consoleObserver;
 
     public CalculadoraController(CalculadoraView view)
     {
         this.calculadora = new Calculadora();
+        this.displayObserver = new DisplayObserver(this);
+        this.consoleObserver = new ConsoleObserver();
+        this.calculadora.addObserver(displayObserver);
+        this.calculadora.addObserver(consoleObserver);
         this.calculadoraView = view;
     }
 
@@ -24,25 +32,25 @@ public class CalculadoraController
             case "*":
             case "-":
             case "+":
-                updateDisplay(button.getText());
+                this.calculadora.setSigno(button.getText());
                 break;
             case "=":
-                updateDisplay(button.getText());
+                this.calculadora.igual();
                 break;
             case ".":
-                updateDisplay(button.getText());
+                this.calculadora.addPunto();
                 break;
             case "CE":
-                updateDisplay(button.getText());
+                this.calculadora.clear();
                 break;
             default:
-                updateDisplay(button.getText());
+                this.calculadora.addNumero(button.getText());
                 break;
         }
     }
 
-    public void updateDisplay(String arg)
+    public void updateDisplay(String textToDisplay)
     {
-        this.calculadoraView.getDisplayText().setText(arg);
+        this.calculadoraView.getDisplayText().setText(textToDisplay);
     }
 }
