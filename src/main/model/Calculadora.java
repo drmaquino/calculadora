@@ -1,3 +1,14 @@
+/**
+ *  Calculadora 1.0
+ *  Autores:
+ *      Mariano Aquino,
+ *      Ezequiel Lansztein,
+ *      Ivan Bevivino
+ *  
+ *  Known bugs:
+ *      presionar signos repetidamente realiza la operacion sobre sí mismo, sobre su último valor registrado.  
+ */
+
 package main.model;
 
 import java.util.Observable;
@@ -12,23 +23,10 @@ public class Calculadora extends Observable
     private String numBuffer;
     private String signoBuffer;
     private OperacionFactory operacionFactory;
-
-    public Calculadora()
+    
+    private String getLastResultado()
     {
-        this.setResultado("0");
-        this.signoBuffer = null;
-        this.setNumBuffer(null);
-        this.operacionFactory = new OperacionFactory();
-    }
-
-    public String getResultado()
-    {
-        return resultado;
-    }
-
-    public void setResultado(String resultado)
-    {
-        this.resultado = resultado;
+        return this.lastResultado;
     }
 
     public String getNumBuffer()
@@ -36,14 +34,52 @@ public class Calculadora extends Observable
         return numBuffer;
     }
 
+    public String getResultado()
+    {
+        return resultado;
+    }
+
+    private String getSignoBuffer()
+    {
+        return this.signoBuffer;
+    }
+    
+    private void setLastResultado(String lastResultado)
+    {
+        this.lastResultado = lastResultado;
+    }
+
     public void setNumBuffer(String numBuffer)
     {
         this.numBuffer = numBuffer;
     }
 
+    public void setResultado(String resultado)
+    {
+        this.resultado = resultado;
+    }
+
+    private void setSignoBuffer(String signoBuffer)
+    {
+        this.signoBuffer = signoBuffer;
+    }
+    
+    private Operacion getOperacion(String signo)
+    {
+        return this.operacionFactory.getOperacion(signo);
+    }
+
+    public Calculadora()
+    {
+        this.setResultado("0");
+        this.setSignoBuffer(null);
+        this.setNumBuffer(null);
+        this.operacionFactory = new OperacionFactory();
+    }
+
     public void addNumero(String numero)
     {
-        this.lastResultado = "0";
+        this.setLastResultado("0");
         if (this.getNumBuffer() == null)
         {
             this.setNumBuffer("");
@@ -51,7 +87,6 @@ public class Calculadora extends Observable
         this.setNumBuffer(this.getNumBuffer() + numero);
         setChanged();
         notifyObservers(getNumBuffer());
-//        return this.getNumBuffer();
     }
 
     public void addPunto()
@@ -64,16 +99,25 @@ public class Calculadora extends Observable
         }
         setChanged();
         notifyObservers(getNumBuffer());
-//        return this.getNumBuffer();
     }
 
     public void setSigno(String signo)
     {
         if (this.getNumBuffer() == null)
-            this.setNumBuffer(this.lastResultado);
+            this.setNumBuffer(this.getLastResultado());
         update();
-        this.signoBuffer = signo;
-//        return this.signoBuffer;
+        setChanged();
+        notifyObservers(getResultado());
+        this.setSignoBuffer(signo);
+    }
+
+    public void clear()
+    {
+        this.setResultado("0");
+        this.setNumBuffer(null);
+        this.setSignoBuffer(null);
+        setChanged();
+        notifyObservers(getResultado());
     }
 
     public void igual()
@@ -81,17 +125,6 @@ public class Calculadora extends Observable
         update();
         setChanged();
         notifyObservers(getResultado());
-//        return this.getResultado();
-    }
-
-    public void clear()
-    {
-        this.setResultado("0");
-        this.setNumBuffer(null);
-        this.signoBuffer = null;
-        setChanged();
-        notifyObservers(getResultado());
-//        return this.getResultado();
     }
 
     private void update()
@@ -100,52 +133,50 @@ public class Calculadora extends Observable
 
         if (this.getNumBuffer() != null)
         {
-            if (this.signoBuffer != null)
+            if (this.getSignoBuffer() != null)
             {
                 try
                 {
                     Double operando1 = Double.valueOf(this.getResultado());
                     Double operando2 = Double.valueOf(this.getNumBuffer());
 
-                    operacion = this.crearOperacion(this.signoBuffer);
+                    operacion = this.getOperacion(this.signoBuffer);
                     operacion.setOperando1(operando1);
                     operacion.setOperando2(operando2);
                     Double tmp = operacion.calcular();
                     if (tmp == null)
                     {
                         this.setResultado("ERROR");
-                    } else
+                    }
+                    else
                     {
                         this.setResultado(tmp.toString());
                     }
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     this.setResultado("");
                 }
                 this.setNumBuffer(null);
-                this.signoBuffer = null;
-            } else
+                this.setSignoBuffer(null);
+            }
+            else
             {
                 this.setResultado(getNumBuffer());
                 this.setNumBuffer(null);
             }
-        } else
+        }
+        else
         {
             if (this.signoBuffer == null)
             {
                 this.setResultado("0");
-            } else
+            }
+            else
             {
                 // nada
             }
         }
-
-        this.lastResultado = this.getResultado();
-//        return this.getResultado();
-    }
-
-    private Operacion crearOperacion(String signo)
-    {
-        return this.operacionFactory.getOperacion(signo);
+        this.setLastResultado(this.getResultado());
     }
 }

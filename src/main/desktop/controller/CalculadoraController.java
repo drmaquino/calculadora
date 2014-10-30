@@ -5,8 +5,6 @@ import main.desktop.DisplayObserver;
 import main.desktop.view.CalculadoraView;
 import main.model.Calculadora;
 
-import org.eclipse.swt.widgets.Button;
-
 public class CalculadoraController
 {
     private Calculadora calculadora;
@@ -18,34 +16,47 @@ public class CalculadoraController
     {
         this.calculadora = new Calculadora();
         this.displayObserver = new DisplayObserver(this);
-        this.consoleObserver = new ConsoleObserver();
         this.calculadora.addObserver(displayObserver);
-        this.calculadora.addObserver(consoleObserver);
+        this.consoleObserver = new ConsoleObserver();
+        this.calculadora.addObserver(consoleObserver);        
         this.calculadoraView = view;
     }
 
-    public void callback(Button button)
+    public void callback(String arg)
     {
-        switch (button.getText())
+        switch (arg)
         {
-            case "/":
-            case "*":
-            case "-":
-            case "+":
-                this.calculadora.setSigno(button.getText());
-                break;
-            case "=":
-                this.calculadora.igual();
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+            case "9":
+            case "0":
+                this.calculadora.addNumero(arg);
                 break;
             case ".":
                 this.calculadora.addPunto();
                 break;
+            case "/":
+            case "*":
+            case "-":
+            case "+":
+                this.calculadora.setSigno(arg);
+                break;
             case "CE":
                 this.calculadora.clear();
                 break;
-            default:
-                this.calculadora.addNumero(button.getText());
+            case "=":
+                this.calculadora.igual();
                 break;
+            default:
+                this.calculadora.igual();
+                break;
+                
         }
     }
 
