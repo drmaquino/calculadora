@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">calculadora</string>
-    <string name="action_settings">Settings</string>
-	<string name="calc_total_default">0</string>
-	<string name="btnNum7">Settings</string>
-	
-</resources>
