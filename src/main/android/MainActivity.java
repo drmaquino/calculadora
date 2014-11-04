@@ -8,14 +8,16 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-    private Calculadora calculadora = new Calculadora();
-    private DisplayObserver displayObserver = new DisplayObserver(this);
+    private Calculadora calculadora;
+    private DisplayObserver displayObserver;
     private TextView texto;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        calculadora = new Calculadora();
+        displayObserver = new DisplayObserver(this);
         calculadora.addObserver(this.displayObserver);
         texto = (TextView) findViewById(R.id.editTotal);
     }
